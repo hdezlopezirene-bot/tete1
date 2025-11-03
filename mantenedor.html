@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tete Carriman - Sistema de Gestión</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #1abc9c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --text: #333333;
+            --text-light: #7f8c8d;
+            --border: #e1e8ed;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        .dark-mode {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --bg: #121212;
+            --surface: #1e1e1e;
+            --text: #ffffff;
+            --text-light: #bdc3c7;
+            --border: #34495e;
+            --shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        /* Header Styles */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.2rem 1.5rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 42px;
+            height: 42px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .app-title h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .app-title p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle, .back-button {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover, .back-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        .back-button {
+            display: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .module-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem 1rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            min-height: 140px;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+        }
+
+        .module-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: white;
+            font-size: 1.4rem;
+        }
+
+        .module-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .module-desc {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 8px 0 4px;
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* CRUD Sections */
+        .crud-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .crud-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Forms */
+        .form-container {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-control {
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.95rem;
+            transition: border 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Tables */
+        .table-container {
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-top: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-paid {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-overdue {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-active {
+            background: #d1edff;
+            color: #004085;
+        }
+
+        .status-inactive {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 6px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .app-header {
+                padding: 1rem;
+            }
+            
+            .header-content {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .app-title h1 {
+                font-size: 1.2rem;
+            }
+            
+            .app-title p {
+                font-size: 0.8rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+            
+            .module-card {
+                padding: 1.2rem 0.8rem;
+                min-height: 120px;
+            }
+            
+            .module-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+            
+            .module-title {
+                font-size: 0.9rem;
+            }
+            
+            .module-desc {
+                font-size: 0.75rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .section-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                min-width: 700px;
+            }
+
+            .tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+            
+            .tab {
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .module-card {
+                min-height: 110px;
+            }
+            
+            .module-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo">TC</div>
+                    <div class="app-title">
+                        <h1>Tete Carriman</h1>
+                        <p>Sistema de Gestión Integral</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="back-button" id="backButton">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboardView">
+                <!-- Stats Cards -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-title">Total de Deudas</div>
+                        <div class="stat-value">$1,450,000</div>
+                        <div class="stat-desc">+12% este mes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Clientes con Deuda</div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-desc">De 128 clientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Deuda Promedio</div>
+                        <div class="stat-value">$60,417</div>
+                        <div class="stat-desc">Por cliente</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Deudas Pagadas</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-desc">Este mes</div>
+                    </div>
+                </div>
+
+                <!-- Module Grid -->
+                <h2 style="margin-bottom: 1rem; font-weight: 600;">Módulos del Sistema</h2>
+                <div class="dashboard-grid">
+                    <!-- Gestión de Clientes -->
+                    <div class="module-card" data-module="clientes">
+                        <div class="module-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="module-title">Clientes</div>
+                        <div class="module-desc">Gestión de clientes</div>
+                    </div>
+
+                    <!-- Control de Deudas -->
+                    <div class="module-card" data-module="deudas">
+                        <div class="module-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="module-title">Control Deudas</div>
+                        <div class="module-desc">Gestión de deudas</div>
+                    </div>
+
+                    <!-- Registro de Pagos -->
+                    <div class="module-card" data-module="pagos">
+                        <div class="module-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="module-title">Registrar Pagos</div>
+                        <div class="module-desc">Registro de pagos</div>
+                    </div>
+
+                    <!-- Historial -->
+                    <div class="module-card" data-module="historial">
+                        <div class="module-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="module-title">Historial</div>
+                        <div class="module-desc">Historial de pagos</div>
+                    </div>
+
+                    <!-- Productos -->
+                    <div class="module-card" data-module="productos">
+                        <div class="module-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="module-title">Productos</div>
+                        <div class="module-desc">Gestión de productos</div>
+                    </div>
+
+                    <!-- Ventas -->
+                    <div class="module-card" data-module="ventas">
+                        <div class="module-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="module-title">Ventas</div>
+                        <div class="module-desc">Registro de ventas</div>
+                    </div>
+
+                    <!-- Proveedores -->
+                    <div class="module-card" data-module="proveedores">
+                        <div class="module-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="module-title">Proveedores</div>
+                        <div class="module-desc">Gestión de proveedores</div>
+                    </div>
+
+                    <!-- Reportes -->
+                    <div class="module-card" data-module="reportes">
+                        <div class="module-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="module-title">Reportes</div>
+                        <div class="module-desc">Reportes y análisis</div>
+                    </div>
+
+                    <!-- Inventario -->
+                    <div class="module-card" data-module="inventario">
+                        <div class="module-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <div class="module-title">Inventario</div>
+                        <div class="module-desc">Control de stock</div>
+                    </div>
+
+                    <!-- Sucursales -->
+                    <div class="module-card" data-module="sucursales">
+                        <div class="module-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="module-title">Sucursales</div>
+                        <div class="module-desc">Gestión de locales</div>
+                    </div>
+
+                    <!-- Promociones -->
+                    <div class="module-card" data-module="promociones">
+                        <div class="module-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <div class="module-title">Promociones</div>
+                        <div class="module-desc">Ofertas y descuentos</div>
+                    </div>
+
+                    <!-- Configuración -->
+                    <div class="module-card" data-module="configuracion">
+                        <div class="module-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="module-title">Configuración</div>
+                        <div class="module-desc">Ajustes del sistema</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clientes Section -->
+            <div class="crud-section" id="clientesSection">
+                <div class="section-header">
+                    <h2 class="section-title">Gestión de Clientes</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-outline" id="exportClients">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                        <button class="btn btn-primary" id="addClient">
+                            <i class="fas fa-plus"></i> Agregar Cliente
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="clientName" placeholder="Nombre completo">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="clientPhone" placeholder="Número de teléfono">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="clientEmail" placeholder="Correo electrónico">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="clientAddress" placeholder="Dirección completa">
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                        <button class="btn btn-primary" id="saveClient">
+                            <i class="fas fa-save"></i> Guardar Cliente
+                        </button>
+                        <button class="btn btn-outline" id="clearClientForm">
+                            <i class="fas fa-times"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Deuda Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody">
+                            <!-- Datos de clientes se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Deudas Section -->
+            <div class="crud-section" id="deudasSection">
+                <div class="section-header">
+                    <h2 class="section-title">Control de Deudas</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-warning" id="sendReminders">
+                            <i class="fas fa-bell"></i> Enviar Recordatorios
+                        </button>
+                        <button class="btn btn-primary" id="addDebt">
+                            <i class="fas fa-plus"></i> Nueva Deuda
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Cliente</label>
+                            <select class="form-control" id="debtClient">
+                                <option value="">Seleccionar cliente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Monto</label>
+                            <input type="number" class="form-control" id="debtAmount" placeholder="Monto de deuda">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fecha Vencimiento</label>
+                            <input type="date" class="form-control" id="debtDueDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="debtDescription" placeholder="Descripción de la deuda">
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                        <button class="btn btn-primary" id="saveDebt">
+                            <i class="fas fa-save"></i> Guardar Deuda
+                        </button>
+                        <button class="btn btn-outline" id="clearDebtForm">
+                            <i class="fas fa-times"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Monto</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>Días Restantes</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="debtsTableBody">
+                            <!-- Datos de deudas se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagos Section -->
+            <div class="crud-section" id="pagosSection">
+                <div class="section-header">
+                    <h2 class="section-title">Registro de Pagos</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-outline" id="printReceipt">
+                            <i class="fas fa-print"></i> Imprimir Recibo
+                        </button>
+                        <button class="btn btn-primary" id="addPayment">
+                            <i class="fas fa-plus"></i> Registrar Pago
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Cliente</label>
+                            <select class="form-control" id="paymentClient">
+                                <option value="">Seleccionar cliente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Monto Pagado</label>
+                            <input type="number" class="form-control" id="paymentAmount" placeholder="Monto del pago">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fecha Pago</label>
+                            <input type="date" class="form-control" id="paymentDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Método de Pago</label>
+                            <select class="form-control" id="paymentMethod">
+                                <option value="efectivo">Efectivo</option>
+                                <option value="transferencia">Transferencia</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="cheque">Cheque</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                        <button class="btn btn-success" id="savePayment">
+                            <i class="fas fa-check"></i> Registrar Pago
+                        </button>
+                        <button class="btn btn-outline" id="clearPaymentForm">
+                            <i class="fas fa-times"></i> Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Monto</th>
+                                <th>Fecha</th>
+                                <th>Método</th>
+                                <th>Referencia</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentsTableBody">
+                            <!-- Datos de pagos se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Productos Section -->
+            <div class="crud-section" id="productosSection">
+                <div class="section-header">
+                    <h2 class="section-title">Gestión de Productos</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-outline" id="exportProducts">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                        <button class="btn btn-primary" id="addProduct">
+                            <i class="fas fa-plus"></i> Nuevo Producto
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" data-tab="productos">Productos</button>
+                    <button class="tab" data-tab="categorias">Categorías</button>
+                </div>
+
+                <div class="tab-content active" id="productosTab">
+                    <div class="form-container">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="productName" placeholder="Nombre del producto">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Categoría</label>
+                                <select class="form-control" id="productCategory">
+                                    <option value="">Seleccionar categoría</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Precio</label>
+                                <input type="number" class="form-control" id="productPrice" placeholder="Precio de venta">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="productStock" placeholder="Cantidad en stock">
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                            <button class="btn btn-primary" id="saveProduct">
+                                <i class="fas fa-save"></i> Guardar Producto
+                            </button>
+                            <button class="btn btn-outline" id="clearProductForm">
+                                <i class="fas fa-times"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <!-- Datos de productos se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="categoriasTab">
+                    <div class="form-container">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Nombre Categoría</label>
+                                <input type="text" class="form-control" id="categoryName" placeholder="Nombre de la categoría">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Descripción</label>
+                                <input type="text" class="form-control" id="categoryDescription" placeholder="Descripción">
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                            <button class="btn btn-primary" id="saveCategory">
+                                <i class="fas fa-save"></i> Guardar Categoría
+                            </button>
+                            <button class="btn btn-outline" id="clearCategoryForm">
+                                <i class="fas fa-times"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Descripción</th>
+                                    <th>Productos</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTableBody">
+                                <!-- Datos de categorías se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ventas Section -->
+            <div class="crud-section" id="ventasSection">
+                <div class="section-header">
+                    <h2 class="section-title">Registro de Ventas</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-outline" id="exportSales">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                        <button class="btn btn-primary" id="newSale">
+                            <i class="fas fa-plus"></i> Nueva Venta
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Cliente</label>
+                            <select class="form-control" id="saleClient">
+                                <option value="">Seleccionar cliente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Producto</label>
+                            <select class="form-control" id="saleProduct">
+                                <option value="">Seleccionar producto</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" class="form-control" id="saleQuantity" placeholder="Cantidad" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Precio Unitario</label>
+                            <input type="number" class="form-control" id="saleUnitPrice" placeholder="Precio unitario" readonly>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 10px;">
+                        <button class="btn btn-info" id="addToCart">
+                            <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                        </button>
+                        <button class="btn btn-success" id="completeSale">
+                            <i class="fas fa-check"></i> Completar Venta
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <h3 style="padding: 1rem; border-bottom: 1px solid var(--border);">Detalles de Venta</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="saleItemsTableBody">
+                            <!-- Items de venta se cargarán aquí -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" style="text-align: right; font-weight: bold;">Total:</td>
+                                <td id="saleTotal" style="font-weight: bold;">$0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="table-container" style="margin-top: 1.5rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th># Venta</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody">
+                            <!-- Historial de ventas se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Las demás secciones (Proveedores, Reportes, Inventario, etc.) seguirían el mismo patrón -->
+            
+        </main>
+    </div>
+
+    <script>
+        // Estado de la aplicación
+        const appState = {
+            currentModule: 'dashboard',
+            clients: [
+                { id: 1, name: 'Juan Pérez', phone: '+56912345678', email: 'juan@example.com', address: 'Av. Principal 123', debt: 150000, status: 'pending' },
+                { id: 2, name: 'María González', phone: '+56987654321', email: 'maria@example.com', address: 'Calle Secundaria 456', debt: 80000, status: 'pending' },
+                { id: 3, name: 'Carlos López', phone: '+56911223344', email: 'carlos@example.com', address: 'Plaza Central 789', debt: 0, status: 'paid' }
+            ],
+            debts: [
+                { id: 1, clientId: 1, amount: 150000, dueDate: '2023-12-15', description: 'Compra de mercadería', status: 'pending', daysLeft: 45 },
+                { id: 2, clientId: 2, amount: 80000, dueDate: '2023-11-30', description: 'Servicios varios', status: 'overdue', daysLeft: -5 },
+                { id: 3, clientId: 3, amount: 250000, dueDate: '2023-10-15', description: 'Productos varios', status: 'paid', daysLeft: 0 }
+            ],
+            payments: [
+                { id: 1, clientId: 3, amount: 250000, date: '2023-10-10', method: 'transferencia', reference: 'TRF-001' }
+            ],
+            products: [
+                { id: 1, name: 'Producto A', category: 'Electrónicos', price: 15000, stock: 45, status: 'active' },
+                { id: 2, name: 'Producto B', category: 'Hogar', price: 22000, stock: 12, status: 'active' },
+                { id: 3, name: 'Producto C', category: 'Electrónicos', price: 18000, stock: 0, status: 'inactive' }
+            ],
+            categories: [
+                { id: 1, name: 'Electrónicos', description: 'Productos electrónicos', productCount: 2 },
+                { id: 2, name: 'Hogar', description: 'Artículos para el hogar', productCount: 1 }
+            ],
+            sales: [
+                { id: 1, clientId: 1, date: '2023-10-01', total: 45000, status: 'completed' },
+                { id: 2, clientId: 2, date: '2023-10-05', total: 22000, status: 'completed' }
+            ],
+            currentSale: {
+                items: [],
+                total: 0
+            }
+        };
+
+        // Elementos DOM
+        const dashboardView = document.getElementById('dashboardView');
+        const backButton = document.getElementById('backButton');
+        const themeToggle = document.getElementById('themeToggle');
+        const moduleCards = document.querySelectorAll('.module-card');
+        const crudSections = document.querySelectorAll('.crud-section');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            renderClientsTable();
+            renderDebtsTable();
+            renderPaymentsTable();
+            renderProductsTable();
+            renderCategoriesTable();
+            renderSalesTable();
+            updateClientSelectors();
+            updateProductSelectors();
+            updateCategorySelectors();
+        });
+
+        function initializeApp() {
+            // Configurar event listeners
+            themeToggle.addEventListener('click', toggleTheme);
+            backButton.addEventListener('click', goBackToDashboard);
+            
+            moduleCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const module = this.getAttribute('data-module');
+                    openModule(module);
+                });
+            });
+
+            // Configurar tabs
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            // Configurar botones de clientes
+            document.getElementById('saveClient').addEventListener('click', saveClient);
+            document.getElementById('clearClientForm').addEventListener('click', clearClientForm);
+
+            // Configurar botones de deudas
+            document.getElementById('saveDebt').addEventListener('click', saveDebt);
+            document.getElementById('clearDebtForm').addEventListener('click', clearDebtForm);
+
+            // Configurar botones de pagos
+            document.getElementById('savePayment').addEventListener('click', savePayment);
+            document.getElementById('clearPaymentForm').addEventListener('click', clearPaymentForm);
+
+            // Configurar botones de productos
+            document.getElementById('saveProduct').addEventListener('click', saveProduct);
+            document.getElementById('clearProductForm').addEventListener('click', clearProductForm);
+            document.getElementById('saveCategory').addEventListener('click', saveCategory);
+            document.getElementById('clearCategoryForm').addEventListener('click', clearCategoryForm);
+
+            // Configurar botones de ventas
+            document.getElementById('addToCart').addEventListener('click', addToCart);
+            document.getElementById('completeSale').addEventListener('click', completeSale);
+            document.getElementById('saleProduct').addEventListener('change', updateProductPrice);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        function openModule(module) {
+            // Ocultar dashboard
+            dashboardView.style.display = 'none';
+            
+            // Mostrar botón de volver
+            backButton.style.display = 'flex';
+            
+            // Ocultar todas las secciones CRUD
+            crudSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección correspondiente
+            const section = document.getElementById(module + 'Section');
+            if (section) {
+                section.classList.add('active');
+            }
+            
+            appState.currentModule = module;
+        }
+
+        function goBackToDashboard() {
+            // Mostrar dashboard
+            dashboardView.style.display = 'block';
+            
+            // Ocultar botón de volver
+            backButton.style.display = 'none';
+            
+            // Ocultar todas las secciones CRUD
+            crudSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            appState.currentModule = 'dashboard';
+        }
+
+        function switchTab(tabId) {
+            // Actualizar tabs
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-tab') === tabId) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Actualizar contenidos
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabId + 'Tab') {
+                    content.classList.add('active');
+                }
+            });
+        }
+
+        function updateClientSelectors() {
+            const selectors = ['debtClient', 'paymentClient', 'saleClient'];
+            selectors.forEach(selector => {
+                const element = document.getElementById(selector);
+                if (element) {
+                    element.innerHTML = '<option value="">Seleccionar cliente</option>';
+                    appState.clients.forEach(client => {
+                        element.innerHTML += `<option value="${client.id}">${client.name}</option>`;
+                    });
+                }
+            });
+        }
+
+        function updateProductSelectors() {
+            const selector = document.getElementById('saleProduct');
+            if (selector) {
+                selector.innerHTML = '<option value="">Seleccionar producto</option>';
+                appState.products.forEach(product => {
+                    if (product.status === 'active' && product.stock > 0) {
+                        selector.innerHTML += `<option value="${product.id}" data-price="${product.price}">${product.name} - $${product.price.toLocaleString()}</option>`;
+                    }
+                });
+            }
+        }
+
+        function updateCategorySelectors() {
+            const selector = document.getElementById('productCategory');
+            if (selector) {
+                selector.innerHTML = '<option value="">Seleccionar categoría</option>';
+                appState.categories.forEach(category => {
+                    selector.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+                });
+            }
+        }
+
+        function updateProductPrice() {
+            const productSelect = document.getElementById('saleProduct');
+            const priceInput = document.getElementById('saleUnitPrice');
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            
+            if (selectedOption.value) {
+                priceInput.value = selectedOption.getAttribute('data-price');
+            } else {
+                priceInput.value = '';
+            }
+        }
+
+        // Funciones para Clientes
+        function renderClientsTable() {
+            const tbody = document.getElementById('clientsTableBody');
+            tbody.innerHTML = '';
+            
+            appState.clients.forEach(client => {
+                const statusClass = client.debt === 0 ? 'status-paid' : 
+                                  client.debt > 100000 ? 'status-overdue' : 'status-pending';
+                const statusText = client.debt === 0 ? 'Al día' : 
+                                 client.debt > 100000 ? 'Moroso' : 'Pendiente';
+                
+                const row = `
+                    <tr>
+                        <td>${client.name}</td>
+                        <td>${client.phone}</td>
+                        <td>${client.email}</td>
+                        <td>$${client.debt.toLocaleString()}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary btn-sm" onclick="editClient(${client.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteClient(${client.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function saveClient() {
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const email = document.getElementById('clientEmail').value;
+            const address = document.getElementById('clientAddress').value;
+            
+            if (!name) {
+                alert('Por favor ingresa el nombre del cliente');
+                return;
+            }
+            
+            const newClient = {
+                id: appState.clients.length > 0 ? Math.max(...appState.clients.map(c => c.id)) + 1 : 1,
+                name,
+                phone,
+                email,
+                address,
+                debt: 0,
+                status: 'active'
+            };
+            
+            appState.clients.push(newClient);
+            renderClientsTable();
+            updateClientSelectors();
+            clearClientForm();
+            
+            alert('Cliente guardado exitosamente');
+        }
+
+        function clearClientForm() {
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientPhone').value = '';
+            document.getElementById('clientEmail').value = '';
+            document.getElementById('clientAddress').value = '';
+        }
+
+        function editClient(id) {
+            const client = appState.clients.find(c => c.id === id);
+            if (client) {
+                document.getElementById('clientName').value = client.name;
+                document.getElementById('clientPhone').value = client.phone;
+                document.getElementById('clientEmail').value = client.email;
+                document.getElementById('clientAddress').value = client.address;
+                
+                // Cambiar texto del botón
+                const saveBtn = document.getElementById('saveClient');
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Actualizar Cliente';
+                saveBtn.onclick = function() { updateClient(id); };
+            }
+        }
+
+        function updateClient(id) {
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const email = document.getElementById('clientEmail').value;
+            const address = document.getElementById('clientAddress').value;
+            
+            const clientIndex = appState.clients.findIndex(c => c.id === id);
+            if (clientIndex !== -1) {
+                appState.clients[clientIndex] = {
+                    ...appState.clients[clientIndex],
+                    name,
+                    phone,
+                    email,
+                    address
+                };
+                
+                renderClientsTable();
+                updateClientSelectors();
+                clearClientForm();
+                
+                // Restaurar botón
+                const saveBtn = document.getElementById('saveClient');
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Cliente';
+                saveBtn.onclick = saveClient;
+                
+                alert('Cliente actualizado exitosamente');
+            }
+        }
+
+        function deleteClient(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+                appState.clients = appState.clients.filter(c => c.id !== id);
+                renderClientsTable();
+                updateClientSelectors();
+                alert('Cliente eliminado exitosamente');
+            }
+        }
+
+        // Funciones para Deudas
+        function renderDebtsTable() {
+            const tbody = document.getElementById('debtsTableBody');
+            tbody.innerHTML = '';
+            
+            appState.debts.forEach(debt => {
+                const client = appState.clients.find(c => c.id === debt.clientId);
+                const statusClass = debt.status === 'paid' ? 'status-paid' : 
+                                  debt.status === 'overdue' ? 'status-overdue' : 'status-pending';
+                const statusText = debt.status === 'paid' ? 'Pagada' : 
+                                 debt.status === 'overdue' ? 'Vencida' : 'Pendiente';
+                
+                const row = `
+                    <tr>
+                        <td>${client ? client.name : 'N/A'}</td>
+                        <td>$${debt.amount.toLocaleString()}</td>
+                        <td>${debt.dueDate}</td>
+                        <td>${debt.daysLeft}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-success btn-sm" onclick="markDebtAsPaid(${debt.id})">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteDebt(${debt.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function saveDebt() {
+            const clientId = parseInt(document.getElementById('debtClient').value);
+            const amount = parseFloat(document.getElementById('debtAmount').value);
+            const dueDate = document.getElementById('debtDueDate').value;
+            const description = document.getElementById('debtDescription').value;
+            
+            if (!clientId || !amount || !dueDate) {
+                alert('Por favor completa todos los campos obligatorios');
+                return;
+            }
+            
+            const today = new Date();
+            const due = new Date(dueDate);
+            const daysLeft = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+            
+            const newDebt = {
+                id: appState.debts.length > 0 ? Math.max(...appState.debts.map(d => d.id)) + 1 : 1,
+                clientId,
+                amount,
+                dueDate,
+                description,
+                status: daysLeft < 0 ? 'overdue' : 'pending',
+                daysLeft
+            };
+            
+            appState.debts.push(newDebt);
+            
+            // Actualizar deuda del cliente
+            const clientIndex = appState.clients.findIndex(c => c.id === clientId);
+            if (clientIndex !== -1) {
+                appState.clients[clientIndex].debt += amount;
+            }
+            
+            renderDebtsTable();
+            renderClientsTable();
+            clearDebtForm();
+            
+            alert('Deuda registrada exitosamente');
+        }
+
+        function clearDebtForm() {
+            document.getElementById('debtClient').value = '';
+            document.getElementById('debtAmount').value = '';
+            document.getElementById('debtDueDate').value = '';
+            document.getElementById('debtDescription').value = '';
+        }
+
+        function markDebtAsPaid(id) {
+            const debtIndex = appState.debts.findIndex(d => d.id === id);
+            if (debtIndex !== -1) {
+                appState.debts[debtIndex].status = 'paid';
+                
+                // Actualizar deuda del cliente
+                const clientIndex = appState.clients.findIndex(c => c.id === appState.debts[debtIndex].clientId);
+                if (clientIndex !== -1) {
+                    appState.clients[clientIndex].debt -= appState.debts[debtIndex].amount;
+                }
+                
+                renderDebtsTable();
+                renderClientsTable();
+                alert('Deuda marcada como pagada');
+            }
+        }
+
+        function deleteDebt(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta deuda?')) {
+                const debtIndex = appState.debts.findIndex(d => d.id === id);
+                if (debtIndex !== -1 && appState.debts[debtIndex].status !== 'paid') {
+                    // Actualizar deuda del cliente
+                    const clientIndex = appState.clients.findIndex(c => c.id === appState.debts[debtIndex].clientId);
+                    if (clientIndex !== -1) {
+                        appState.clients[clientIndex].debt -= appState.debts[debtIndex].amount;
+                    }
+                }
+                
+                appState.debts = appState.debts.filter(d => d.id !== id);
+                renderDebtsTable();
+                renderClientsTable();
+                alert('Deuda eliminada exitosamente');
+            }
+        }
+
+        // Funciones para Pagos
+        function renderPaymentsTable() {
+            const tbody = document.getElementById('paymentsTableBody');
+            tbody.innerHTML = '';
+            
+            appState.payments.forEach(payment => {
+                const client = appState.clients.find(c => c.id === payment.clientId);
+                
+                const row = `
+                    <tr>
+                        <td>${client ? client.name : 'N/A'}</td>
+                        <td>$${payment.amount.toLocaleString()}</td>
+                        <td>${payment.date}</td>
+                        <td>${payment.method}</td>
+                        <td>${payment.reference || 'N/A'}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline btn-sm" onclick="printReceipt(${payment.id})">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function savePayment() {
+            const clientId = parseInt(document.getElementById('paymentClient').value);
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            const date = document.getElementById('paymentDate').value;
+            const method = document.getElementById('paymentMethod').value;
+            
+            if (!clientId || !amount || !date) {
+                alert('Por favor completa todos los campos obligatorios');
+                return;
+            }
+            
+            const newPayment = {
+                id: appState.payments.length > 0 ? Math.max(...appState.payments.map(p => p.id)) + 1 : 1,
+                clientId,
+                amount,
+                date,
+                method,
+                reference: 'P' + Date.now()
+            };
+            
+            appState.payments.push(newPayment);
+            
+            // Buscar deudas pendientes del cliente y aplicar el pago
+            let remainingAmount = amount;
+            const clientDebts = appState.debts.filter(d => d.clientId === clientId && d.status !== 'paid');
+            
+            for (let debt of clientDebts) {
+                if (remainingAmount <= 0) break;
+                
+                const debtIndex = appState.debts.findIndex(d => d.id === debt.id);
+                if (debtIndex !== -1) {
+                    if (remainingAmount >= debt.amount) {
+                        // Pago completo de la deuda
+                        appState.debts[debtIndex].status = 'paid';
+                        remainingAmount -= debt.amount;
+                        
+                        // Actualizar deuda del cliente
+                        const clientIndex = appState.clients.findIndex(c => c.id === clientId);
+                        if (clientIndex !== -1) {
+                            appState.clients[clientIndex].debt -= debt.amount;
+                        }
+                    } else {
+                        // Pago parcial
+                        appState.debts[debtIndex].amount -= remainingAmount;
+                        
+                        // Actualizar deuda del cliente
+                        const clientIndex = appState.clients.findIndex(c => c.id === clientId);
+                        if (clientIndex !== -1) {
+                            appState.clients[clientIndex].debt -= remainingAmount;
+                        }
+                        
+                        remainingAmount = 0;
+                    }
+                }
+            }
+            
+            renderPaymentsTable();
+            renderDebtsTable();
+            renderClientsTable();
+            clearPaymentForm();
+            
+            alert('Pago registrado exitosamente');
+        }
+
+        function clearPaymentForm() {
+            document.getElementById('paymentClient').value = '';
+            document.getElementById('paymentAmount').value = '';
+            document.getElementById('paymentDate').value = '';
+            document.getElementById('paymentMethod').value = 'efectivo';
+        }
+
+        function printReceipt(paymentId) {
+            alert('Funcionalidad de impresión de recibo para el pago #' + paymentId);
+            // Aquí iría la lógica para generar e imprimir el recibo
+        }
+
+        // Funciones para Productos
+        function renderProductsTable() {
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = '';
+            
+            appState.products.forEach(product => {
+                const statusClass = product.status === 'active' ? 'status-active' : 'status-inactive';
+                const statusText = product.status === 'active' ? 'Activo' : 'Inactivo';
+                
+                const row = `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${product.category}</td>
+                        <td>$${product.price.toLocaleString()}</td>
+                        <td>${product.stock}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary btn-sm" onclick="editProduct(${product.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function renderCategoriesTable() {
+            const tbody = document.getElementById('categoriesTableBody');
+            tbody.innerHTML = '';
+            
+            appState.categories.forEach(category => {
+                const row = `
+                    <tr>
+                        <td>${category.name}</td>
+                        <td>${category.description}</td>
+                        <td>${category.productCount}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary btn-sm" onclick="editCategory(${category.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteCategory(${category.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function saveProduct() {
+            const name = document.getElementById('productName').value;
+            const categoryId = parseInt(document.getElementById('productCategory').value);
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const stock = parseInt(document.getElementById('productStock').value);
+            
+            if (!name || !categoryId || !price) {
+                alert('Por favor completa todos los campos obligatorios');
+                return;
+            }
+            
+            const category = appState.categories.find(c => c.id === categoryId);
+            
+            const newProduct = {
+                id: appState.products.length > 0 ? Math.max(...appState.products.map(p => p.id)) + 1 : 1,
+                name,
+                category: category ? category.name : 'Sin categoría',
+                price,
+                stock: stock || 0,
+                status: 'active'
+            };
+            
+            appState.products.push(newProduct);
+            
+            // Actualizar contador de productos en la categoría
+            if (category) {
+                const categoryIndex = appState.categories.findIndex(c => c.id === categoryId);
+                appState.categories[categoryIndex].productCount += 1;
+            }
+            
+            renderProductsTable();
+            renderCategoriesTable();
+            updateProductSelectors();
+            clearProductForm();
+            
+            alert('Producto guardado exitosamente');
+        }
+
+        function clearProductForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productCategory').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productStock').value = '';
+        }
+
+        function saveCategory() {
+            const name = document.getElementById('categoryName').value;
+            const description = document.getElementById('categoryDescription').value;
+            
+            if (!name) {
+                alert('Por favor ingresa el nombre de la categoría');
+                return;
+            }
+            
+            const newCategory = {
+                id: appState.categories.length > 0 ? Math.max(...appState.categories.map(c => c.id)) + 1 : 1,
+                name,
+                description,
+                productCount: 0
+            };
+            
+            appState.categories.push(newCategory);
+            renderCategoriesTable();
+            updateCategorySelectors();
+            clearCategoryForm();
+            
+            alert('Categoría guardada exitosamente');
+        }
+
+        function clearCategoryForm() {
+            document.getElementById('categoryName').value = '';
+            document.getElementById('categoryDescription').value = '';
+        }
+
+        // Funciones para Ventas
+        function renderSalesTable() {
+            const tbody = document.getElementById('salesTableBody');
+            tbody.innerHTML = '';
+            
+            appState.sales.forEach(sale => {
+                const client = appState.clients.find(c => c.id === sale.clientId);
+                const statusClass = sale.status === 'completed' ? 'status-paid' : 'status-pending';
+                const statusText = sale.status === 'completed' ? 'Completada' : 'Pendiente';
+                
+                const row = `
+                    <tr>
+                        <td>#${sale.id.toString().padStart(4, '0')}</td>
+                        <td>${client ? client.name : 'N/A'}</td>
+                        <td>${sale.date}</td>
+                        <td>$${sale.total.toLocaleString()}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-outline btn-sm" onclick="viewSaleDetails(${sale.id})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function addToCart() {
+            const productId = parseInt(document.getElementById('saleProduct').value);
+            const quantity = parseInt(document.getElementById('saleQuantity').value);
+            
+            if (!productId || !quantity || quantity <= 0) {
+                alert('Por favor selecciona un producto y una cantidad válida');
+                return;
+            }
+            
+            const product = appState.products.find(p => p.id === productId);
+            if (!product) {
+                alert('Producto no encontrado');
+                return;
+            }
+            
+            if (product.stock < quantity) {
+                alert('Stock insuficiente. Stock disponible: ' + product.stock);
+                return;
+            }
+            
+            const existingItem = appState.currentSale.items.find(item => item.productId === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+                existingItem.subtotal = existingItem.quantity * existingItem.unitPrice;
+            } else {
+                appState.currentSale.items.push({
+                    productId,
+                    productName: product.name,
+                    quantity,
+                    unitPrice: product.price,
+                    subtotal: quantity * product.price
+                });
+            }
+            
+            // Actualizar total
+            appState.currentSale.total = appState.currentSale.items.reduce((sum, item) => sum + item.subtotal, 0);
+            
+            renderSaleItems();
+            clearSaleForm();
+        }
+
+        function renderSaleItems() {
+            const tbody = document.getElementById('saleItemsTableBody');
+            const totalElement = document.getElementById('saleTotal');
+            
+            tbody.innerHTML = '';
+            
+            appState.currentSale.items.forEach((item, index) => {
+                const row = `
+                    <tr>
+                        <td>${item.productName}</td>
+                        <td>${item.quantity}</td>
+                        <td>$${item.unitPrice.toLocaleString()}</td>
+                        <td>$${item.subtotal.toLocaleString()}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-danger btn-sm" onclick="removeFromCart(${index})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            
+            totalElement.textContent = `$${appState.currentSale.total.toLocaleString()}`;
+        }
+
+        function removeFromCart(index) {
+            appState.currentSale.items.splice(index, 1);
+            appState.currentSale.total = appState.currentSale.items.reduce((sum, item) => sum + item.subtotal, 0);
+            renderSaleItems();
+        }
+
+        function completeSale() {
+            const clientId = parseInt(document.getElementById('saleClient').value);
+            
+            if (!clientId) {
+                alert('Por favor selecciona un cliente');
+                return;
+            }
+            
+            if (appState.currentSale.items.length === 0) {
+                alert('No hay productos en el carrito');
+                return;
+            }
+            
+            // Crear nueva venta
+            const newSale = {
+                id: appState.sales.length > 0 ? Math.max(...appState.sales.map(s => s.id)) + 1 : 1,
+                clientId,
+                date: new Date().toISOString().split('T')[0],
+                total: appState.currentSale.total,
+                status: 'completed',
+                items: [...appState.currentSale.items]
+            };
+            
+            appState.sales.push(newSale);
+            
+            // Actualizar stock de productos
+            appState.currentSale.items.forEach(item => {
+                const productIndex = appState.products.findIndex(p => p.id === item.productId);
+                if (productIndex !== -1) {
+                    appState.products[productIndex].stock -= item.quantity;
+                    
+                    // Si el stock llega a 0, marcar como inactivo
+                    if (appState.products[productIndex].stock === 0) {
+                        appState.products[productIndex].status = 'inactive';
+                    }
+                }
+            });
+            
+            // Limpiar carrito
+            appState.currentSale = {
+                items: [],
+                total: 0
+            };
+            
+            renderSalesTable();
+            renderProductsTable();
+            renderSaleItems();
+            updateProductSelectors();
+            clearSaleForm();
+            
+            alert('Venta completada exitosamente. Total: $' + newSale.total.toLocaleString());
+        }
+
+        function clearSaleForm() {
+            document.getElementById('saleClient').value = '';
+            document.getElementById('saleProduct').value = '';
+            document.getElementById('saleQuantity').value = '1';
+            document.getElementById('saleUnitPrice').value = '';
+        }
+
+        function viewSaleDetails(saleId) {
+            const sale = appState.sales.find(s => s.id === saleId);
+            if (sale) {
+                let details = 'Detalles de Venta #' + sale.id + '\n\n';
+                details += 'Cliente: ' + (appState.clients.find(c => c.id === sale.clientId)?.name || 'N/A') + '\n';
+                details += 'Fecha: ' + sale.date + '\n';
+                details += 'Total: $' + sale.total.toLocaleString() + '\n\n';
+                details += 'Productos:\n';
+                
+                if (sale.items) {
+                    sale.items.forEach(item => {
+                        details += `- ${item.productName}: ${item.quantity} x $${item.unitPrice} = $${item.subtotal}\n`;
+                    });
+                }
+                
+                alert(details);
+            }
+        }
+
+        // Las funciones para Proveedores, Reportes, Inventario, etc. seguirían el mismo patrón
+    </script>
+</body>
+</html>
